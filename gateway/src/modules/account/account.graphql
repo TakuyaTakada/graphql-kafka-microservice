@@ -1,0 +1,20 @@
+enum MutationReturn {
+  Accepted
+}
+type User {
+  id: ID!
+}
+type Query {
+  me: User!
+}
+type Mutation {
+  register: MutationReturn!
+  login(input: LoginInput!): MutationReturn!
+}
+type Subscription {
+  friendLoggedIn: User!
+}
+
+input LoginInput {
+  id: ID!
+}

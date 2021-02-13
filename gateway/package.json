@@ -1,0 +1,49 @@
+{
+  "name": "gateway",
+  "version": "0.0.1",
+  "description": "GraphQL server with apollo-server",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.21.0",
+    "graphql": "^15.5.0",
+    "graphql-import-node": "^0.0.4",
+    "graphql-modules": "^1.2.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.20.1",
+    "@graphql-codegen/typescript": "1.21.0",
+    "@graphql-codegen/typescript-document-nodes": "1.17.9",
+    "@graphql-codegen/typescript-resolvers": "1.18.2",
+    "@types/node": "^14.14.27",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
+    "husky": "4.3.8",
+    "lint-staged": ">=10",
+    "prettier": "^2.2.1",
+    "ts-node-dev": "^1.1.1",
+    "typescript": "^4.1.5"
+  },
+  "scripts": {
+    "build": "tsc -p . && yarn cpgql",
+    "cpgql": "copyfiles -u 1 'src/**/*.graphql' 'lib/'",
+    "start": "tsnd --respawn src/index.ts",
+    "codegen": "graphql-codegen --config codegen.yml",
+    "lint": "eslint .",
+    "prettier:diff": "prettier -l .",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix",
+    "*.{ts,json,graphql,css,md}": "prettier --write"
+  }
+}
