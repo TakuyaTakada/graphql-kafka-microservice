@@ -3,6 +3,8 @@ schema: "http://localhost:4000/graphql"
 documents: null
 generates:
   src/__generated__/graphql.ts:
+    config:
+      contextType: ../context#Context
     plugins:
       - "typescript"
       - "typescript-resolvers"

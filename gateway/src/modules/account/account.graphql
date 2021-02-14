@@ -3,18 +3,20 @@ enum MutationReturn {
 }
 type User {
   id: ID!
+  email: String!
 }
 type Query {
   me: User!
 }
 type Mutation {
-  register: MutationReturn!
-  login(input: LoginInput!): MutationReturn!
+  signUp(input: AccountInput!): MutationReturn!
+  signIn(input: AccountInput!): MutationReturn!
 }
 type Subscription {
   friendLoggedIn: User!
 }
 
-input LoginInput {
-  id: ID!
+input AccountInput {
+  email: String!
+  password: String!
 }

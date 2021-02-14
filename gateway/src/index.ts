@@ -1,15 +1,16 @@
 import { ApolloServer, PubSub } from 'apollo-server'
 import schema from './modules'
+import KafkaProducer from './messaging/KafkaProducer'
+import { kafkaGlobalConfig } from './config/kafka'
 
 const pubsub = new PubSub()
+const producerPromise = KafkaProducer.init(kafkaGlobalConfig)
 
 const server = new ApolloServer({
   schema,
   context: ({ req, connection }) => {
-    if (connection) {
-      return { ...connection.context, pubsub }
-    }
-    return { ...req, pubsub }
+    const context = connection || req
+    return { ...context, pubsub, producerPromise }
   },
 })
 

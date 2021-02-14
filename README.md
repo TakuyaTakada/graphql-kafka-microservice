@@ -33,3 +33,5 @@ Communication between services
 Apache Kafka (Confluent)
 
 ---
+
+## Development environment
