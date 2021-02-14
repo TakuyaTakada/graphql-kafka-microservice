@@ -4,13 +4,16 @@ enum MutationReturn {
 type User {
   id: ID!
   email: String!
+  iconUrl: String
 }
+
 type Query {
   me: User!
 }
 type Mutation {
-  signUp(input: AccountInput!): MutationReturn!
+  signUp(input: AccountInput!): User!
   signIn(input: AccountInput!): MutationReturn!
+  setIconUrl(Input: UrlInput!): User!
 }
 type Subscription {
   friendLoggedIn: User!
@@ -19,4 +22,8 @@ type Subscription {
 input AccountInput {
   email: String!
   password: String!
+}
+
+input UrlInput {
+  url: String!
 }

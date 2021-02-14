@@ -80,9 +80,9 @@ FIREBASE_TOKEN=<Your token> firebase init
 ...
 === Emulators Setup
 ? Which Firebase emulators do you want to set up? Press Space to select emulators, then Enter to confirm your choices. (Press <space> to select, <a> to toggle all, <i> to invert selection)
-❯◉ Authentication Emulator
+ ◉ Authentication Emulator
  ◯ Functions Emulator
- ◯ Firestore Emulator
+❯◉ Firestore Emulator
  ◯ Database Emulator
  ◯ Hosting Emulator
  ◯ Pub/Sub Emulator
@@ -95,6 +95,8 @@ Back to root directory
 ```
 cd ../
 ```
+
+Download Firebase service account key from project settings and place to `gateway/src/secrets` directory as `firebaseServiceAccount.json`
 
 Run containers with docker-compose
 

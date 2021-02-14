@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { Context } from '../context';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  JSON: any;
 };
 
 export enum MutationReturn {
@@ -23,17 +24,25 @@ export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   email: Scalars['String'];
+  iconUrl?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
   __typename?: 'Query';
   me: User;
+  getUploadParams: FileUploadParams;
+};
+
+
+export type QueryGetUploadParamsArgs = {
+  input: GetUploadParamsInput;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  signUp: MutationReturn;
+  signUp: User;
   signIn: MutationReturn;
+  setIconUrl: User;
 };
 
 
@@ -46,6 +55,11 @@ export type MutationSignInArgs = {
   input: AccountInput;
 };
 
+
+export type MutationSetIconUrlArgs = {
+  Input: UrlInput;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   friendLoggedIn: User;
@@ -54,6 +68,21 @@ export type Subscription = {
 export type AccountInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type UrlInput = {
+  url: Scalars['String'];
+};
+
+
+export type FileUploadParams = {
+  __typename?: 'FileUploadParams';
+  url: Scalars['String'];
+  fields: Scalars['JSON'];
+};
+
+export type GetUploadParamsInput = {
+  extension: Scalars['String'];
 };
 
 
@@ -142,6 +171,10 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
   AccountInput: AccountInput;
+  UrlInput: UrlInput;
+  JSON: ResolverTypeWrapper<Scalars['JSON']>;
+  FileUploadParams: ResolverTypeWrapper<FileUploadParams>;
+  GetUploadParamsInput: GetUploadParamsInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
@@ -154,26 +187,43 @@ export type ResolversParentTypes = {
   Mutation: {};
   Subscription: {};
   AccountInput: AccountInput;
+  UrlInput: UrlInput;
+  JSON: Scalars['JSON'];
+  FileUploadParams: FileUploadParams;
+  GetUploadParamsInput: GetUploadParamsInput;
   Boolean: Scalars['Boolean'];
 };
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  iconUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  getUploadParams?: Resolver<ResolversTypes['FileUploadParams'], ParentType, ContextType, RequireFields<QueryGetUploadParamsArgs, 'input'>>;
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  signUp?: Resolver<ResolversTypes['MutationReturn'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'input'>>;
+  signUp?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'input'>>;
   signIn?: Resolver<ResolversTypes['MutationReturn'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'input'>>;
+  setIconUrl?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSetIconUrlArgs, 'Input'>>;
 };
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   friendLoggedIn?: SubscriptionResolver<ResolversTypes['User'], "friendLoggedIn", ParentType, ContextType>;
+};
+
+export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
+}
+
+export type FileUploadParamsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['FileUploadParams'] = ResolversParentTypes['FileUploadParams']> = {
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fields?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = Context> = {
@@ -181,6 +231,8 @@ export type Resolvers<ContextType = Context> = {
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  JSON?: GraphQLScalarType;
+  FileUploadParams?: FileUploadParamsResolvers<ContextType>;
 };
 
 
