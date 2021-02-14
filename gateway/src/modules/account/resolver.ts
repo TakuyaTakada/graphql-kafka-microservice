@@ -1,18 +1,29 @@
 import { MutationReturn, Resolvers, User } from '../../__generated__/graphql'
+import { TMessage, TopicEnum } from '../../messaging/KafkaProducer'
 
 const accountResolvers: Resolvers = {
   Query: {
     me: (_, args, context) => {
-      return { id: 'user-1' }
+      return { id: 'user-1', email: 'dummy' }
     },
   },
   Mutation: {
-    register: (_, args, context) => {
+    signUp: async (_, { input }, { producerPromise }) => {
+      const { email, password } = input
+      const message: TMessage = {
+        key: 'register',
+        value: {
+          email: email,
+          password: password,
+        },
+      }
+      const producer = await producerPromise
+      producer.publish(TopicEnum.account, message)
       return MutationReturn.Accepted
     },
-    login: (_, { input }, { pubsub }) => {
-      const { id } = input
-      pubsub.publish('FriendLoggedIn', { id })
+    signIn: (_, { input }, { pubsub }) => {
+      const { email, password } = input
+      pubsub.publish('FriendLoggedIn', { email })
       return MutationReturn.Accepted
     },
   },

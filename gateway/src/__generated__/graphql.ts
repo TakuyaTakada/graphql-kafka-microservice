@@ -1,4 +1,5 @@
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
+import { Context } from '../context';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -12,29 +13,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Upload: any;
-};
-
-
-export type Query = {
-  __typename?: 'Query';
-  me: User;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  register: MutationReturn;
-  login: MutationReturn;
-};
-
-
-export type MutationLoginArgs = {
-  input: LoginInput;
-};
-
-export type Subscription = {
-  __typename?: 'Subscription';
-  friendLoggedIn: User;
 };
 
 export enum MutationReturn {
@@ -44,17 +22,39 @@ export enum MutationReturn {
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
+  email: Scalars['String'];
 };
 
-export type LoginInput = {
-  id: Scalars['ID'];
+export type Query = {
+  __typename?: 'Query';
+  me: User;
 };
 
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
+export type Mutation = {
+  __typename?: 'Mutation';
+  signUp: MutationReturn;
+  signIn: MutationReturn;
+};
 
+
+export type MutationSignUpArgs = {
+  input: AccountInput;
+};
+
+
+export type MutationSignInArgs = {
+  input: AccountInput;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  friendLoggedIn: User;
+};
+
+export type AccountInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
 
 
 
@@ -134,67 +134,53 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Query: ResolverTypeWrapper<{}>;
-  Mutation: ResolverTypeWrapper<{}>;
-  Subscription: ResolverTypeWrapper<{}>;
   MutationReturn: MutationReturn;
   User: ResolverTypeWrapper<User>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  LoginInput: LoginInput;
-  CacheControlScope: CacheControlScope;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Query: ResolverTypeWrapper<{}>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Subscription: ResolverTypeWrapper<{}>;
+  AccountInput: AccountInput;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  User: User;
+  ID: Scalars['ID'];
+  String: Scalars['String'];
   Query: {};
   Mutation: {};
   Subscription: {};
-  User: User;
-  ID: Scalars['ID'];
-  LoginInput: LoginInput;
-  Upload: Scalars['Upload'];
-  Int: Scalars['Int'];
+  AccountInput: AccountInput;
   Boolean: Scalars['Boolean'];
-  String: Scalars['String'];
 };
 
-export type CacheControlDirectiveArgs = {   maxAge?: Maybe<Scalars['Int']>;
-  scope?: Maybe<CacheControlScope>; };
-
-export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = CacheControlDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-};
-
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  register?: Resolver<ResolversTypes['MutationReturn'], ParentType, ContextType>;
-  login?: Resolver<ResolversTypes['MutationReturn'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
-};
-
-export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  friendLoggedIn?: SubscriptionResolver<ResolversTypes['User'], "friendLoggedIn", ParentType, ContextType>;
-};
-
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
+export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+};
 
-export type Resolvers<ContextType = any> = {
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  signUp?: Resolver<ResolversTypes['MutationReturn'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'input'>>;
+  signIn?: Resolver<ResolversTypes['MutationReturn'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'input'>>;
+};
+
+export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  friendLoggedIn?: SubscriptionResolver<ResolversTypes['User'], "friendLoggedIn", ParentType, ContextType>;
+};
+
+export type Resolvers<ContextType = Context> = {
+  User?: UserResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
-  User?: UserResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
 };
 
 
@@ -202,14 +188,4 @@ export type Resolvers<ContextType = any> = {
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;
-export type DirectiveResolvers<ContextType = any> = {
-  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
-};
-
-
-/**
- * @deprecated
- * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
- */
-export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;
+export type IResolvers<ContextType = Context> = Resolvers<ContextType>;
