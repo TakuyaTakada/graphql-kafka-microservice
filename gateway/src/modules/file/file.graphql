@@ -1,0 +1,13 @@
+scalar JSON
+type FileUploadParams {
+  url: String!
+  fields: JSON!
+}
+
+input GetUploadParamsInput {
+  extension: String!
+}
+
+extend type Query {
+  getUploadParams(input: GetUploadParamsInput!): FileUploadParams!
+}

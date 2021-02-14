@@ -1,6 +1,18 @@
----
 version: '3'
 services:
+# Firebase
+  firebase:
+    container_name: firebase
+    build:
+      context: firebase
+    ports:
+    - "4100:4100"
+    - "4200:4200"
+    - "9099:9099"
+    env_file:
+      - firebase/.env
+
+# Apache Kafka (Confluent Platform) configuration
   zookeeper:
     image: confluentinc/cp-zookeeper:6.1.0
     hostname: zookeeper
